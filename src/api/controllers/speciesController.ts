@@ -4,6 +4,7 @@ import CustomError from '../../classes/CustomError';
 import {Species} from '../../interfaces/Species';
 import speciesModel from '../models/speciesModel';
 import DBMessageResponse from '../../interfaces/DBMessageResponse';
+import rectangleBounds from '../../utils/rectangleBounds';
 // TODO: Controller for species model
 
 const speciesListget = async (
@@ -139,4 +140,51 @@ const speciesDelete = async (
   }
 };
 
-export {speciesListget, speciesGet, speciesPost, speciesPut, speciesDelete};
+const speciesByAreaGet = async (
+  req: Request<{}, {}, {}, {topRight: string; bottomLeft: string}>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const messages = errors
+        .array()
+        .map((error) => `${error.msg}: ${error.param}`)
+        .join(', ');
+      throw new CustomError(messages, 400);
+    }
+
+    const {topRight, bottomLeft} = req.query;
+    const [trLat, trLng] = topRight.split(',');
+    const [blLat, blLng] = bottomLeft.split(',');
+    const bounds = rectangleBounds(
+      {lat: trLat, lng: trLng},
+      {lat: blLat, lng: blLng}
+    );
+
+    const species = await speciesModel.find({
+      location: {
+        $geoWithin: {
+          $geometry: bounds,
+        },
+      },
+    });
+    if (!species) {
+      next(new CustomError('No species found', 404));
+      return;
+    }
+    res.json(species);
+  } catch (error) {
+    next(new CustomError((error as Error).message, 500));
+  }
+};
+
+export {
+  speciesListget,
+  speciesGet,
+  speciesPost,
+  speciesPut,
+  speciesDelete,
+  speciesByAreaGet,
+};
