@@ -11,7 +11,10 @@ const animalListGet = async (
   next: NextFunction
 ) => {
   try {
-    const animals = await animalModel.find().populate('species');
+    const animals = await animalModel.find().populate({
+      path: 'species',
+      populate: {path: 'category'},
+    });
     if (!animals) {
       next(new CustomError('No animals found', 404));
       return;
@@ -33,9 +36,10 @@ const animalGet = async (req: Request, res: Response, next: NextFunction) => {
       throw new CustomError(messages, 400);
     }
 
-    const animal = await animalModel
-      .findById(req.params.id)
-      .populate('species');
+    const animal = await animalModel.findById(req.params.id).populate({
+      path: 'species',
+      populate: {path: 'category'},
+    });
     if (!animal) {
       next(new CustomError('No animal found', 404));
       return;
@@ -62,6 +66,10 @@ const animalPost = async (
     }
 
     const animal = await animalModel.create(req.body);
+    await animal.populate({
+      path: 'species',
+      populate: {path: 'category'},
+    });
     const output: DBMessageResponse = {
       message: 'Animal created',
       data: animal,
@@ -89,7 +97,10 @@ const animalPut = async (
 
     const animal = await animalModel
       .findByIdAndUpdate(req.params.id, req.body, {new: true})
-      .populate('species');
+      .populate({
+        path: 'species',
+        populate: {path: 'category'},
+      });
     if (!animal) {
       next(new CustomError('No animal found', 404));
       return;
@@ -119,7 +130,10 @@ const animalDelete = async (
       throw new CustomError(messages, 400);
     }
 
-    const animal = await animalModel.findByIdAndDelete(req.params.id);
+    const animal = await animalModel.findByIdAndDelete(req.params.id).populate({
+      path: 'species',
+      populate: {path: 'category'},
+    });
     if (!animal) {
       next(new CustomError('No animal found', 404));
       return;
