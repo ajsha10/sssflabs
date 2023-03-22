@@ -25,11 +25,11 @@ const getAllSpecies = async (
           species.forEach((specie) => {
             expect(specie._id).not.toBe('');
             expect(specie.species_name).not.toBe('');
-            expect(specie.category._id).not.toBe('');
-            expect(specie.category.category_name).not.toBe('');
+            expect(specie.category!._id).not.toBe('');
+            expect(specie.category!.category_name).not.toBe('');
             expect(specie.image).not.toBe('');
-            expect(specie.location.type).toBe('Point');
-            expect(specie.location.coordinates).not.toBe([]);
+            expect(specie.location!.type).toBe('Point');
+            expect(specie.location!.coordinates).not.toBe([]);
           });
           resolve(species);
         }
@@ -51,11 +51,11 @@ const getSpecies = async (
           const specie: SpeciesTest = response.body;
           expect(specie._id).not.toBe('');
           expect(specie.species_name).not.toBe('');
-          expect(specie.category._id).not.toBe('');
-          expect(specie.category.category_name).not.toBe('');
+          expect(specie.category!._id).not.toBe('');
+          expect(specie.category!.category_name).not.toBe('');
           expect(specie.image).not.toBe('');
-          expect(specie.location.type).toBe('Point');
-          expect(specie.location.coordinates).not.toBe([]);
+          expect(specie.location!.type).toBe('Point');
+          expect(specie.location!.coordinates).not.toBe([]);
           resolve(specie);
         }
       });
@@ -65,7 +65,7 @@ const getSpecies = async (
 const postSpecies = async (
   url: string | Function,
   species_name: string,
-  category_id: string,
+  category: string,
   location: {
     type: 'Point';
     coordinates: [number, number];
@@ -74,7 +74,7 @@ const postSpecies = async (
   return new Promise((resolve, reject) => {
     request(url)
       .post('/api/v1/species')
-      .send({species_name, category_id, location})
+      .send({species_name, category, location})
       .expect(200, (err, response) => {
         if (err) {
           reject(err);
@@ -83,7 +83,7 @@ const postSpecies = async (
           const data = message.data as SpeciesOutput;
           expect(message.message).not.toBe('');
           expect(data.species_name).toBe(species_name);
-          expect(data.category._id).toBe(category_id);
+          expect(data.category._id).toBe(category);
           resolve(message);
         }
       });
@@ -154,11 +154,11 @@ const getSpeciesFromArea = async (
           species.forEach((specie) => {
             expect(specie._id).not.toBe('');
             expect(specie.species_name).not.toBe('');
-            expect(specie.category._id).not.toBe('');
-            expect(specie.category.category_name).not.toBe('');
+            expect(specie.category!._id).not.toBe('');
+            expect(specie.category!.category_name).not.toBe('');
             expect(specie.image).not.toBe('');
-            expect(specie.location.type).toBe('Point');
-            expect(specie.location.coordinates).not.toBe([]);
+            expect(specie.location!.type).toBe('Point');
+            expect(specie.location!.coordinates).not.toBe([]);
           });
           resolve(species);
         }

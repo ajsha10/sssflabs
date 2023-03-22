@@ -44,7 +44,6 @@ describe('GET /api/v1', () => {
     );
   });
 
-  /*
   // test succesful species routes
 
   let speciesMessage: DBMessageResponse;
@@ -52,7 +51,10 @@ describe('GET /api/v1', () => {
     const newSpecies: Species = {
       species_name: 'test species',
       category: categoryMessage.result._id!,
-      location:[48.7563158, 11.2006231],
+      location: {
+        type: 'Point',
+        coordinates: [48.7563158, 11.2006231],
+      },
     };
     speciesMessage = await postSpecies(app, newSpecies);
   });
@@ -79,7 +81,7 @@ describe('GET /api/v1', () => {
     };
     await putSpecies(app, speciesMessage.result._id!, newSpecies);
   });
-
+  /*
   // test succesful animal routes
 
   let animalMessage: DBMessageResponse;

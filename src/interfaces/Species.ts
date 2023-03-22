@@ -15,11 +15,11 @@ interface SpeciesOutput {
 }
 
 interface SpeciesTest {
-  _id: string;
-  species_name: string;
-  category: Category;
-  image: string;
-  location: Point;
+  _id?: string;
+  species_name?: string;
+  category?: Category;
+  image?: string;
+  location?: Point;
 }
 
 export {Species, SpeciesOutput, SpeciesTest};
