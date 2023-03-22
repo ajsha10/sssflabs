@@ -67,7 +67,11 @@ const speciesPost = async (
 
     const output: DBMessageResponse = {
       message: 'Species created',
-      data: species,
+      data: {
+        _id: species._id,
+        species_name: species.species_name,
+        category: species.category,
+      },
     };
 
     res.json(output);

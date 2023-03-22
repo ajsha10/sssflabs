@@ -9,4 +9,9 @@ interface Species extends Document {
   location: Point;
 }
 
-export {Species};
+interface SpeciesOutput {
+  species_name: string;
+  category: Types.ObjectId;
+}
+
+export {Species, SpeciesOutput};
