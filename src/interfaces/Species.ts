@@ -14,4 +14,12 @@ interface SpeciesOutput {
   category: Types.ObjectId;
 }
 
-export {Species, SpeciesOutput};
+interface SpeciesTest {
+  _id: string;
+  species_name: string;
+  category: Category;
+  image: string;
+  location: Point;
+}
+
+export {Species, SpeciesOutput, SpeciesTest};

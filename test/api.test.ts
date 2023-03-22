@@ -3,6 +3,13 @@ import DBMessageResponse from '../src/interfaces/DBMessageResponse';
 import mongoose from 'mongoose';
 import app from '../src/app';
 import {Types} from 'mongoose';
+import {
+  getCategories,
+  getCategory,
+  postCategory,
+  putCategory,
+} from './testCategory';
+import {Category} from '../src/interfaces/Category';
 // const app = 'http://localhost:3000';
 
 describe('GET /api/v1', () => {
@@ -13,7 +20,7 @@ describe('GET /api/v1', () => {
   afterAll(async () => {
     await mongoose.connection.close();
   });
-  /*
+
   // test succesful category routes
   let categoryMessage: DBMessageResponse;
 
@@ -26,13 +33,18 @@ describe('GET /api/v1', () => {
   });
 
   it('Should get a category', async () => {
-    await getCategory(app, categoryMessage.result._id!);
+    await getCategory(app, (categoryMessage.data as Category)._id!);
   });
 
   it('Should put a category', async () => {
-    await putCategory(app, categoryMessage.result._id!, 'test category');
+    await putCategory(
+      app,
+      (categoryMessage.data as Category)._id!,
+      'test category changed'
+    );
   });
 
+  /*
   // test succesful species routes
 
   let speciesMessage: DBMessageResponse;
