@@ -141,7 +141,7 @@ const categoryDelete = async (
   }
 };
 
-export default {
+export {
   categoryListGet,
   categoryGet,
   categoryPost,
