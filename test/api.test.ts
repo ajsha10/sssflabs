@@ -52,10 +52,7 @@ describe('GET /api/v1', () => {
     const newSpecies: Species = {
       species_name: 'test species',
       category: categoryMessage.result._id!,
-      location: {
-        type: 'Point',
-        coordinates: [48.7563158, 11.2006231],
-      },
+      location:[48.7563158, 11.2006231],
     };
     speciesMessage = await postSpecies(app, newSpecies);
   });

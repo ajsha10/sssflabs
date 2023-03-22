@@ -1,6 +1,6 @@
 /* eslint-disable node/no-unpublished-import */
 import request from 'supertest';
-import {SpeciesTest} from '../src/interfaces/Species';
+import {Species, SpeciesOutput, SpeciesTest} from '../src/interfaces/Species';
 import DBMessageResponse from '../src/interfaces/DBMessageResponse';
 
 // TODO: Add tests for the following:
@@ -35,4 +35,142 @@ const getAllSpecies = async (
         }
       });
   });
+};
+
+const getSpecies = async (
+  url: string | Function,
+  id: string
+): Promise<SpeciesTest> => {
+  return new Promise((resolve, reject) => {
+    request(url)
+      .get(`/api/v1/species/${id}`)
+      .expect(200, (err, response) => {
+        if (err) {
+          reject(err);
+        } else {
+          const specie: SpeciesTest = response.body;
+          expect(specie._id).not.toBe('');
+          expect(specie.species_name).not.toBe('');
+          expect(specie.category._id).not.toBe('');
+          expect(specie.category.category_name).not.toBe('');
+          expect(specie.image).not.toBe('');
+          expect(specie.location.type).toBe('Point');
+          expect(specie.location.coordinates).not.toBe([]);
+          resolve(specie);
+        }
+      });
+  });
+};
+
+const postSpecies = async (
+  url: string | Function,
+  species_name: string,
+  category_id: string,
+  location: {
+    type: 'Point';
+    coordinates: [number, number];
+  }
+): Promise<DBMessageResponse> => {
+  return new Promise((resolve, reject) => {
+    request(url)
+      .post('/api/v1/species')
+      .send({species_name, category_id, location})
+      .expect(200, (err, response) => {
+        if (err) {
+          reject(err);
+        } else {
+          const message: DBMessageResponse = response.body;
+          const data = message.data as SpeciesOutput;
+          expect(message.message).not.toBe('');
+          expect(data.species_name).toBe(species_name);
+          expect(data.category._id).toBe(category_id);
+          resolve(message);
+        }
+      });
+  });
+};
+
+const putSpecies = async (
+  url: string | Function,
+  id: string,
+  species_name: string
+): Promise<DBMessageResponse> => {
+  return new Promise((resolve, reject) => {
+    request(url)
+      .put(`/api/v1/species/${id}`)
+      .send({species_name})
+      .expect(200, (err, response) => {
+        if (err) {
+          reject(err);
+        } else {
+          const message: DBMessageResponse = response.body;
+          const data = message.data as Species;
+          expect(message.message).not.toBe('');
+          expect(data.species_name).toBe(species_name);
+          resolve(message);
+        }
+      });
+  });
+};
+
+const deleteSpecies = async (
+  url: string | Function,
+  id: string
+): Promise<DBMessageResponse> => {
+  return new Promise((resolve, reject) => {
+    request(url)
+      .delete(`/api/v1/species/${id}`)
+      .expect(200, (err, response) => {
+        if (err) {
+          reject(err);
+        } else {
+          const message: DBMessageResponse = response.body;
+          const data = message.data as Species;
+          expect(message.message).not.toBe('');
+          expect(data._id).toBe(id);
+          resolve(message);
+        }
+      });
+  });
+};
+
+const getSpeciesFromArea = async (
+  url: string | Function,
+  area: {
+    topRight: string;
+    bottomLeft: string;
+  }
+): Promise<SpeciesTest[]> => {
+  return new Promise((resolve, reject) => {
+    request(url)
+      .get(
+        `/api/v1/species/location?topRight=${area.topRight}&bottomLeft=${area.bottomLeft}`
+      )
+      .expect(200, (err, response) => {
+        if (err) {
+          reject(err);
+        } else {
+          const species: SpeciesTest[] = response.body;
+          species.forEach((specie) => {
+            expect(specie._id).not.toBe('');
+            expect(specie.species_name).not.toBe('');
+            expect(specie.category._id).not.toBe('');
+            expect(specie.category.category_name).not.toBe('');
+            expect(specie.image).not.toBe('');
+            expect(specie.location.type).toBe('Point');
+            expect(specie.location.coordinates).not.toBe([]);
+          });
+          resolve(species);
+        }
+      });
+  });
+};
+
+export {
+  getAllSpecies,
+  getSpecies,
+  postSpecies,
+  putSpecies,
+  deleteSpecies,
+  getSpeciesFromArea,
 };
