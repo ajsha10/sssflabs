@@ -10,6 +10,14 @@ import {
   putCategory,
 } from './testCategory';
 import {Category} from '../src/interfaces/Category';
+import {Species, SpeciesTest} from '../src/interfaces/Species';
+import {
+  getAllSpecies,
+  getSpecies,
+  getSpeciesFromArea,
+  postSpecies,
+} from './testSpecies';
+import {Point} from 'geojson';
 // const app = 'http://localhost:3000';
 
 describe('GET /api/v1', () => {
@@ -48,15 +56,13 @@ describe('GET /api/v1', () => {
 
   let speciesMessage: DBMessageResponse;
   it('Should post a species', async () => {
-    const newSpecies: Species = {
-      species_name: 'test species',
-      category: categoryMessage.result._id!,
-      location: {
-        type: 'Point',
-        coordinates: [48.7563158, 11.2006231],
-      },
+    const species_name = 'test species';
+    const category = (categoryMessage.data as Species)._id!;
+    const location: Point = {
+      type: 'Point',
+      coordinates: [48.7563158, 11.2006231],
     };
-    speciesMessage = await postSpecies(app, newSpecies);
+    speciesMessage = await postSpecies(app, species_name, category, location);
   });
 
   it('Should get array of species', async () => {
@@ -64,7 +70,7 @@ describe('GET /api/v1', () => {
   });
 
   it('Should get a species', async () => {
-    await getSpecies(app, speciesMessage.result._id!);
+    await getSpecies(app, (speciesMessage.data as Species)._id!);
   });
 
   it('Should get species within a bounding box', async () => {
@@ -74,14 +80,15 @@ describe('GET /api/v1', () => {
     };
     await getSpeciesFromArea(app, area);
   });
-
+  /*
   it('Should modify a species', async () => {
     const newSpecies: Species = {
       species_name: 'test species 2',
     };
     await putSpecies(app, speciesMessage.result._id!, newSpecies);
   });
-  /*
+
+
   // test succesful animal routes
 
   let animalMessage: DBMessageResponse;

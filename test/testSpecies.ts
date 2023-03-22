@@ -1,3 +1,4 @@
+import {Point} from 'geojson';
 /* eslint-disable node/no-unpublished-import */
 import request from 'supertest';
 import {Species, SpeciesOutput, SpeciesTest} from '../src/interfaces/Species';
@@ -66,10 +67,7 @@ const postSpecies = async (
   url: string | Function,
   species_name: string,
   category: string,
-  location: {
-    type: 'Point';
-    coordinates: [number, number];
-  }
+  location: Point
 ): Promise<DBMessageResponse> => {
   return new Promise((resolve, reject) => {
     request(url)
