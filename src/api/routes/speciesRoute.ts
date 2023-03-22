@@ -1,5 +1,6 @@
 // TODO: route for species
 import {Router} from 'express';
+import {getWikiImage} from '../../middlewares';
 import {
   speciesListget,
   speciesPost,
@@ -11,10 +12,10 @@ import {
 
 const router = Router();
 
-router.route('/').get(speciesListget).post(speciesPost);
-
-router.route('/:id').get(speciesGet).put(speciesPut).delete(speciesDelete);
+router.route('/').get(speciesListget).post(getWikiImage, speciesPost);
 
 router.route('/location').get(speciesByAreaGet);
+
+router.route('/:id').get(speciesGet).put(speciesPut).delete(speciesDelete);
 
 export default router;

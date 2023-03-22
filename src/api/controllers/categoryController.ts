@@ -18,7 +18,7 @@ const categoryListGet = async (
   next: NextFunction
 ) => {
   try {
-    const categories = await categoryModel.find();
+    const categories = await categoryModel.find().select('-__v');
     if (!categories) {
       next(new CustomError('No categories found', 404));
       return;
@@ -40,7 +40,7 @@ const categoryGet = async (req: Request, res: Response, next: NextFunction) => {
       throw new CustomError(messages, 400);
     }
 
-    const category = await categoryModel.findById(req.params.id);
+    const category = await categoryModel.findById(req.params.id).select('-__v');
     if (!category) {
       next(new CustomError('No category found', 404));
       return;
@@ -92,11 +92,9 @@ const categoryPut = async (
       throw new CustomError(messages, 400);
     }
 
-    const category = await categoryModel.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {new: true}
-    );
+    const category = await categoryModel
+      .findByIdAndUpdate(req.params.id, req.body, {new: true})
+      .select('-__v');
     if (!category) {
       next(new CustomError('No category found', 404));
       return;
@@ -126,7 +124,9 @@ const categoryDelete = async (
       throw new CustomError(messages, 400);
     }
 
-    const category = await categoryModel.findByIdAndDelete(req.params.id);
+    const category = await categoryModel
+      .findByIdAndDelete(req.params.id)
+      .select('-__v');
     if (!category) {
       next(new CustomError('No category found', 404));
       return;
