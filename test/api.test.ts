@@ -2,22 +2,22 @@
 import DBMessageResponse from '../src/interfaces/DBMessageResponse';
 import mongoose from 'mongoose';
 import app from '../src/app';
-import {Types} from 'mongoose';
+import { Types } from 'mongoose';
 import {
   getCategories,
   getCategory,
   postCategory,
   putCategory,
 } from './testCategory';
-import {Category} from '../src/interfaces/Category';
-import {Species, SpeciesTest} from '../src/interfaces/Species';
+import { Category } from '../src/interfaces/Category';
+import { Species, SpeciesTest } from '../src/interfaces/Species';
 import {
   getAllSpecies,
   getSpecies,
   getSpeciesFromArea,
   postSpecies,
 } from './testSpecies';
-import {Point} from 'geojson';
+import { Point } from 'geojson';
 // const app = 'http://localhost:3000';
 
 describe('GET /api/v1', () => {
@@ -80,54 +80,57 @@ describe('GET /api/v1', () => {
     };
     await getSpeciesFromArea(app, area);
   });
-  /*
+
   it('Should modify a species', async () => {
     const newSpecies: Species = {
       species_name: 'test species 2',
+      category: undefined,
+      image: '',
+      location: undefined
     };
     await putSpecies(app, speciesMessage.result._id!, newSpecies);
   });
 
-
-  // test succesful animal routes
-
-  let animalMessage: DBMessageResponse;
-  it('Should post an animal', async () => {
-    const testAnimal: Animal = {
-      animal_name: 'test animal',
-      species: speciesMessage.result._id!,
-      birthdate: '2020-01-01' as unknown as Date,
-    };
-    animalMessage = await postAnimal(app, testAnimal);
-  });
-
-  it('Should get array of animals', async () => {
-    await getAllAnimals(app);
-  });
-
-  it('Should get an animal', async () => {
-    await getAnimal(app, animalMessage.result._id!);
-  });
-
-  it('Should put an animal', async () => {
-    const testAnimal: Animal = {
-      animal_name: 'test animal 2',
-    };
-    await putAnimal(app, animalMessage.result._id!, testAnimal);
-  });
-
-  // delete test data
-
-  it('Should delete an animal', async () => {
-    await deleteAnimal(app, animalMessage.result._id!);
-  });
-
-  it('Should delete a species', async () => {
-    await deleteSpecies(app, speciesMessage.result._id!);
-  });
-
-  it('Should delete a category', async () => {
-    await deleteCategory(app, categoryMessage.result._id!);
-  });
-  */
+  /*
+    // test succesful animal routes
+  
+    let animalMessage: DBMessageResponse;
+    it('Should post an animal', async () => {
+      const testAnimal: Animal = {
+        animal_name: 'test animal',
+        species: speciesMessage.result._id!,
+        birthdate: '2020-01-01' as unknown as Date,
+      };
+      animalMessage = await postAnimal(app, testAnimal);
+    });
+  
+    it('Should get array of animals', async () => {
+      await getAllAnimals(app);
+    });
+  
+    it('Should get an animal', async () => {
+      await getAnimal(app, animalMessage.result._id!);
+    });
+  
+    it('Should put an animal', async () => {
+      const testAnimal: Animal = {
+        animal_name: 'test animal 2',
+      };
+      await putAnimal(app, animalMessage.result._id!, testAnimal);
+    });
+  
+    // delete test data
+  
+    it('Should delete an animal', async () => {
+      await deleteAnimal(app, animalMessage.result._id!);
+    });
+  
+    it('Should delete a species', async () => {
+      await deleteSpecies(app, speciesMessage.result._id!);
+    });
+  
+    it('Should delete a category', async () => {
+      await deleteCategory(app, categoryMessage.result._id!);
+    });
+    */
 });
